@@ -1,0 +1,65 @@
+<resources>
+    <string name="app_name">PocketWord</string>
+    <string name="rv_no_word_tv_text">There\'s nothing here</string>
+    <string name="play_skip_switch_text">Skip known</string>
+    <string name="play_word_switch_text">Word</string>
+    <string name="play_mean_switch_text">Mean</string>
+    <string name="play_sound_switch_text">Sound</string>
+    <string name="main_search_hint">Search</string>
+    <string name="download_title">Downloading</string>
+    <string name="download_ready">Ready</string>
+    <string name="play_delay_tv_text">Current Delay: %1$s s</string>
+    <string name="play_info_tv_text">Progress: %1$d / %2$d</string>
+    <string name="more_menu_download_audio_title">Download audio</string>
+    <string name="more_menu_delete_title">Delete</string>
+    <string name="more_menu_import_title">Import</string>
+    <string name="network_unavailable_toast">Network unavailable</string>
+    <string name="dialog_text_import_title">Text Import</string>
+    <string name="import_auto_complete">Auto Fill</string>
+    <string name="dialog_import_way_csv">Import from CSV file</string>
+    <string name="dialog_import_way_text">Import from text</string>
+    <string name="dialog_text_import_et_hint">Separate words by a comma(,), and make sure case sensitive.</string>
+    <string name="dialog_text_import_confirm">Confirm</string>
+    <string name="rv_import_footer_add">Add</string>
+    <string name="rv_import_word_hint">(word)</string>
+    <string name="rv_import_accent_hint">(accent)</string>
+    <string name="rv_import_mean_hint">(mean)</string>
+    <string name="dialog_confirm">Confirm</string>
+    <string name="dialog_cancel">Cancel</string>
+    <string name="set_progress_dialog_title">Set Progress (Current: %1$d)</string>
+    <string name="more_menu_progress_title">Progress</string>
+    <string name="more_menu_order_title">Order</string>
+    <string name="rv_wordbook_create_text">New book</string>
+    <string name="dialog_create_wordbook_title">Create word book</string>
+    <string name="main_no_book_selected">No book</string>
+    <string name="set_progress_dialog_hint">1 ~ %1$d</string>
+
+    <string name="settings_activity_title">Settings</string>
+    <string name="statistics_activity_title">Statistics</string>
+    <string name="settings_remind_header">Reminder</string>
+    <string name="settings_study_remind_title">Study Remind</string>
+    <string name="settings_study_remind_time_title">Study Remind Time</string>
+    <string name="settings_help_header">Help</string>
+    <string name="settings_ignore_battery_optimization_title">Ignore Battery Optimization</string>
+    <string name="settings_manage_app_launch_settings_title">Manage App Launch Settings</string>
+    <string name="settings_manage_app_launch_settings_summary">Please allow the application to run in background and auto-launch to ensure that the study reminder works properly</string>
+
+    <string name="statistics_count_lc_bg_date_format">M/d</string>
+    <string name="statistics_count_lc_detail_date_format">MMM d</string>
+    <string name="statistics_count_lc_detail_num_format">Count: %1$d</string>
+    <string name="statistics_dura_lc_bg_date_format">M/d</string>
+    <string name="statistics_dura_lc_bg_num_format">%1$dh%2$dm</string>
+    <string name="statistics_dura_lc_detail_date_format">MMM d</string>
+    <string name="statistics_dura_lc_detail_num_format">Duration: %1$dh %2$dm</string>
+
+    <!--  HourMinutePickerDialogFragment  -->
+    <string name="hm_picker_minute_indicator">m</string>
+    <string name="hm_picker_hour_indicator">h</string>
+    <string name="statistics_daily_aver_dura_format">%1$dh %2$dm</string>
+    <string name="daily_average_duration">Daily Average Duration</string>
+    <string name="daily_average_count">Daily Average Count</string>
+    <string name="total_completions">Total Completions</string>
+    <string name="continuous_completions">Continuous Completions</string>
+    <string name="count_trend">Count Trend</string>
+    <string name="duration_trend">Duration Trend</string>
+</resources>

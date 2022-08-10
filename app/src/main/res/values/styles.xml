@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="NoAnimDialog" parent="Theme.PocketWord">
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:backgroundDimAmount">0.32</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowCloseOnTouchOutside">true</item>
+    </style>
+
+    <style name="FadeAnimDialog" parent="NoAnimDialog">
+        <item name="android:windowAnimationStyle">@style/Animation_DialogFade</item>
+    </style>
+
+    <!-- 对话框淡入淡出动画 -->
+    <style name="Animation_DialogFade" parent="android:Animation">
+        <item name="android:windowEnterAnimation">@anim/fade_in</item>
+        <item name="android:windowExitAnimation">@anim/fade_out</item>
+    </style>
+
+    <!-- 对话框按钮文本 -->
+    <style name="TextAppearance.PocketWord.DialogButton" parent="TextAppearance.MaterialComponents.Button">
+        <item name="android:textColor">?attr/colorPrimary</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:letterSpacing">0.008</item>
+    </style>
+
+    <!-- 折线图样式 -->
+    <style name="DefaultLineChartView">
+        <item name="lineWidth">2dp</item>
+        <item name="lineColor">?attr/colorPrimary</item>
+        <item name="bgLineWidth">1px</item>
+        <item name="bgLineColor">@color/gray</item>
+        <item name="bgNumTextSize">10sp</item>
+        <item name="bgNumTextColor">@color/gray</item>
+        <item name="bgDateTextSize">10sp</item>
+        <item name="bgDateTextColor">@color/gray</item>
+        <item name="detailLineWidth">1px</item>
+        <item name="detailLineColor">@color/gray</item>
+        <item name="detailPointStrokeWidth">1dp</item>
+        <item name="detailPointStrokeColor">?attr/colorPrimary</item>
+        <item name="detailPointFillColor">@color/white</item>
+        <item name="detailTextSize">14sp</item>
+        <item name="detailTextColor">?android:attr/textColorPrimary</item>
+        <item name="detailRectColor">?android:attr/colorBackgroundFloating</item>
+        <item name="detailRectShadowColor">?attr/shadowColor</item>
+        <item name="detailRectShadowRadius">6dp</item>
+        <item name="bgLineCount">5</item>
+        <item name="bgLineNumGap">14dp</item>
+        <item name="bgLineDateGap">14dp</item>
+        <item name="detailPointRadius">5dp</item>
+        <item name="detailDateNumGap">2dp</item>
+        <item name="detailLineRectGap">7dp</item>
+        <item name="detailRectPadding">5dp</item>
+        <item name="detailRectRoundCorner">5dp</item>
+    </style>
+
+    <style name="DefaultWheelPicker">
+        <item name="itemTextColor">?android:attr/textColorPrimary</item>
+        <item name="selectedItemTextColor">?attr/colorPrimary</item>
+        <item name="indicatorTextColor">?attr/colorPrimary</item>
+        <item name="selectedItemDividerColor">@color/gray</item>
+        <item name="itemTextSize">14sp</item>
+        <item name="selectedItemTextSize">18sp</item>
+        <item name="indicatorTextSize">16sp</item>
+        <item name="selectedItemTextStrokeWidth">0.8</item>
+        <item name="selectedItemLetterSpacing">0.008</item>
+        <item name="itemHeightSpace">16dp</item>
+        <item name="itemWidthSpace">32dp</item>
+    </style>
+</resources>

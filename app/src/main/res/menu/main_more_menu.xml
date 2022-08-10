@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/main_more_import"
+        android:title="@string/more_menu_import_title" />
+    <item
+        android:id="@+id/main_more_delete"
+        android:title="@string/more_menu_delete_title" />
+    <item
+        android:id="@+id/main_more_order"
+        android:title="@string/more_menu_order_title" />
+    <item
+        android:id="@+id/main_more_progress"
+        android:title="@string/more_menu_progress_title" />
+    <item
+        android:id="@+id/main_more_download_audio"
+        android:title="@string/more_menu_download_audio_title" />
+    <item
+        android:id="@+id/main_more_build_dict"
+        android:title="build dict" />
+</menu>

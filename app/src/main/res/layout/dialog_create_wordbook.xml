@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_dialog_rc_20"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/dialog_create_wordbook_title_tv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="26dp"
+        android:layout_marginTop="15dp"
+        android:text="@string/dialog_create_wordbook_title"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6" />
+
+    <EditText
+        android:id="@+id/dialog_create_wordbook_input_et"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="26dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="15dp"
+        android:inputType="text"
+        android:textSize="16sp" />
+
+    <include layout="@layout/dialog_btn_bar" />
+</LinearLayout>

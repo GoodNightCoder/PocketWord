@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.ImportActivity">
+
+    <!-- 阴影elevation必须设置background生效 -->
+    <RelativeLayout
+        android:id="@+id/import_nav_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="12dp"
+        android:background="?attr/colorBackgroundFloating"
+        android:elevation="10dp"
+        android:paddingHorizontal="36dp"
+        android:paddingVertical="5dp"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <!--编辑-->
+        <TextView
+            android:id="@+id/import_auto_complete_tv"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_alignTop="@id/import_cancel_iv"
+            android:layout_alignBottom="@id/import_cancel_iv"
+            android:layout_alignParentStart="true"
+            android:layout_toStartOf="@id/import_cancel_iv"
+            android:gravity="center_vertical"
+            android:background="@drawable/bg_btn_rc_8"
+            android:text="@string/import_auto_complete"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            android:textColor="@color/color_autocomplete_tv"
+            android:textSize="17sp" />
+
+        <ImageView
+            android:id="@+id/import_cancel_iv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toStartOf="@id/import_confirm_iv"
+            android:background="@drawable/bg_btn_rc_8"
+            android:padding="8dp"
+            android:src="@drawable/ic_baseline_close_24"
+            app:tint="?attr/colorOnSurface"
+            tools:ignore="ContentDescription" />
+
+        <ImageView
+            android:id="@+id/import_confirm_iv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:background="@drawable/bg_btn_rc_8"
+            android:padding="8dp"
+            android:src="@drawable/ic_baseline_check_24"
+            app:tint="?attr/colorOnSurface"
+            tools:ignore="ContentDescription" />
+    </RelativeLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/import_words_rv"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        android:scrollbars="vertical"
+        app:layout_constraintTop_toBottomOf="@id/import_nav_bar"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <ProgressBar
+        android:id="@+id/import_pb"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/import_nav_bar" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

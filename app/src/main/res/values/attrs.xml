@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="wordForegroundColor" format="color" />
+    <attr name="shadowColor" format="color" />
+    <attr name="statisticsBgColor" format="color" />
+
+    <declare-styleable name="LineChartView">
+        <attr name="lineWidth" format="dimension" />
+        <attr name="lineColor" format="color" />
+        <attr name="bgLineWidth" format="dimension" />
+        <attr name="bgLineColor" format="color" />
+        <attr name="bgNumTextSize" format="dimension" />
+        <attr name="bgNumTextColor" format="color" />
+        <attr name="bgDateTextSize" format="dimension" />
+        <attr name="bgDateTextColor" format="color" />
+        <attr name="detailLineWidth" format="dimension" />
+        <attr name="detailLineColor" format="color" />
+        <attr name="detailPointStrokeWidth" format="dimension" />
+        <attr name="detailPointStrokeColor" format="color" />
+        <attr name="detailPointFillColor" format="color" />
+        <attr name="detailTextSize" format="dimension" />
+        <attr name="detailTextColor" format="color" />
+        <attr name="detailRectColor" format="color" />
+        <attr name="detailRectShadowColor" format="color" />
+        <attr name="detailRectShadowRadius" format="dimension" />
+        <attr name="bgLineCount" format="integer" />
+        <attr name="bgLineNumGap" format="dimension" />
+        <attr name="bgLineDateGap" format="dimension" />
+        <attr name="detailPointRadius" format="dimension" />
+        <attr name="detailDateNumGap" format="dimension" />
+        <attr name="detailLineRectGap" format="dimension" />
+        <attr name="detailRectPadding" format="dimension" />
+        <attr name="detailRectRoundCorner" format="dimension" />
+    </declare-styleable>
+
+    <declare-styleable name="WheelPicker">
+        <attr name="itemTextSize" format="dimension" />
+        <attr name="selectedItemTextSize" format="dimension" />
+        <attr name="indicatorTextSize" format="dimension" />
+        <attr name="itemTextColor" format="color" />
+        <attr name="selectedItemTextColor" format="color" />
+        <attr name="indicatorTextColor" format="color" />
+        <attr name="selectedItemTextStrokeWidth" format="float" />
+        <attr name="selectedItemLetterSpacing" format="float" />
+        <attr name="indicatorText" format="string" />
+        <attr name="maxWidthText" format="string" />
+        <attr name="itemWidthSpace" format="dimension" />
+        <attr name="itemHeightSpace" format="dimension" />
+        <attr name="halfVisibleItemCount" format="integer" />
+        <attr name="textSizeGradual" format="boolean" />
+        <attr name="textColorGradual" format="boolean" />
+        <attr name="textAlphaGradual" format="boolean" />
+        <attr name="showCurtain" format="boolean" />
+        <attr name="showSelectedItemDivider" format="boolean" />
+        <attr name="curtainColor" format="color" />
+        <attr name="selectedItemDividerColor" format="color" />
+        <attr name="cyclic" format="boolean" />
+    </declare-styleable>
+
+    <declare-styleable name="IntegerWheelPicker">
+        <attr name="maxValue" format="integer" />
+        <attr name="minValue" format="integer" />
+        <attr name="digits" format="integer" />
+        <attr name="digitsEnable" format="boolean" />
+    </declare-styleable>
+</resources>

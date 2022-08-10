@@ -1,0 +1,31 @@
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory app:title="@string/settings_remind_header">
+
+        <SwitchPreferenceCompat
+            app:defaultValue="false"
+            app:key="study_remind"
+            app:title="@string/settings_study_remind_title" />
+
+        <Preference
+            app:defaultValue="68400"
+            app:dependency="study_remind"
+            app:key="study_remind_time"
+            app:title="@string/settings_study_remind_time_title" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="@string/settings_help_header">
+
+        <Preference
+            app:key="ignore_battery_optimization"
+            app:title="@string/settings_ignore_battery_optimization_title" />
+
+        <Preference
+            app:key="manage_startup_apps"
+            app:summary="@string/settings_manage_app_launch_settings_summary"
+            app:title="@string/settings_manage_app_launch_settings_title" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>
