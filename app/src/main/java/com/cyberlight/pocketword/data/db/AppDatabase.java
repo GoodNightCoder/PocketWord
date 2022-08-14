@@ -11,19 +11,17 @@ import com.cyberlight.pocketword.data.db.converter.BooleanConverter;
 import com.cyberlight.pocketword.data.db.converter.DateConverter;
 import com.cyberlight.pocketword.data.db.dao.CollectWordDao;
 import com.cyberlight.pocketword.data.db.dao.RecordDao;
-import com.cyberlight.pocketword.data.db.dao.SettingsDao;
 import com.cyberlight.pocketword.data.db.dao.WordBookDao;
 import com.cyberlight.pocketword.data.db.dao.WordBookWordDao;
 import com.cyberlight.pocketword.data.db.dao.WordDao;
 import com.cyberlight.pocketword.data.db.entity.Record;
-import com.cyberlight.pocketword.data.db.entity.Settings;
 import com.cyberlight.pocketword.data.db.entity.Word;
 import com.cyberlight.pocketword.data.db.entity.WordBook;
 import com.cyberlight.pocketword.data.db.entity.WordBookWord;
 
 
 @Database(
-        entities = {Word.class, WordBook.class, WordBookWord.class, Settings.class, Record.class},
+        entities = {Word.class, WordBook.class, WordBookWord.class, Record.class},
         version = 1,
         exportSchema = false
 )
@@ -47,8 +45,6 @@ public abstract class AppDatabase extends RoomDatabase {
     public abstract WordBookDao wordBookDao();
 
     public abstract WordBookWordDao wordBookWordDao();
-
-    public abstract SettingsDao settingsDao();
 
     public abstract CollectWordDao collectWordDao();
 

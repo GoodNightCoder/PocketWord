@@ -15,6 +15,20 @@
 
     </PreferenceCategory>
 
+    <PreferenceCategory app:title="@string/settings_study_header">
+
+        <SwitchPreferenceCompat
+            app:defaultValue="true"
+            app:key="skip_known"
+            app:title="@string/settings_skip_known_title" />
+
+        <Preference
+            app:defaultValue="80"
+            app:key="daily_goal"
+            app:title="@string/settings_daily_goal_title" />
+
+    </PreferenceCategory>
+
     <PreferenceCategory app:title="@string/settings_help_header">
 
         <Preference

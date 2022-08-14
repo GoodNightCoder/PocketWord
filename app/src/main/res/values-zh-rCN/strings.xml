@@ -59,4 +59,14 @@
     <string name="settings_ignore_battery_optimization_title">忽略电池优化</string>
     <string name="settings_manage_app_launch_settings_title">应用启动管理</string>
     <string name="settings_manage_app_launch_settings_summary">请允许应用后台运行和自启动，以保证学习提醒正常工作</string>
+    <string name="create_word_book_hint">(词书名称)</string>
+    <string name="invalid_meaning_toast">单词[%1$s]的释义不合法</string>
+    <string name="dialog_yes">是</string>
+    <string name="dialog_no">否</string>
+    <string name="dialog_confirm_import_tv_text">检测到词库中已存在部分待导入单词, 是否进行替换?</string>
+    <string name="settings_study_header">学习</string>
+    <string name="settings_skip_known_title">跳过已掌握单词</string>
+    <string name="settings_daily_goal_title">每日目标</string>
+    <string name="play_known_tv_known">已掌握</string>
+    <string name="play_known_tv_unknown">掌握</string>
 </resources>

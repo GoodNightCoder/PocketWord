@@ -1,7 +1,9 @@
 package com.cyberlight.pocketword.ui;
 
 import android.app.Application;
+import android.content.SharedPreferences;
 import android.text.TextUtils;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.arch.core.util.Function;
@@ -10,7 +12,11 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
+import androidx.preference.PreferenceManager;
 
+import com.cyberlight.pocketword.data.pref.PrefsConst;
+import com.cyberlight.pocketword.data.pref.PrefsMgr;
+import com.cyberlight.pocketword.data.pref.SharedPrefsMgr;
 import com.cyberlight.pocketword.model.CollectWord;
 import com.cyberlight.pocketword.data.db.DataRepository;
 import com.cyberlight.pocketword.data.db.entity.Word;
@@ -19,63 +25,81 @@ import com.google.common.util.concurrent.FutureCallback;
 
 import java.util.List;
 
-public class ActivityMainViewModel extends AndroidViewModel {
+public class ActivityMainViewModel extends AndroidViewModel
+        implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     private static final String TAG = "ActivityMainViewModel";
 
     private final DataRepository repository;
+    private final PrefsMgr prefsMgr;
 
-    // 指示是否有任务在进行，以控制界面的进度条显示
+    private final LiveData<List<WordBook>> wordBooksLiveData;
     private final MutableLiveData<Boolean> working = new MutableLiveData<>();
 
-    // 选中词书
-    private final LiveData<WordBook> usingWordBookLiveData;
-
-    // 选中词书的词汇数量
-    private final LiveData<Integer> wordNumOfUsingBook;
-
-    // 用户搜索框输入内容
+    private final MutableLiveData<Long> usingWordBookIdLiveData = new MutableLiveData<>();
     private final MutableLiveData<String> userSearchLiveData = new MutableLiveData<>();
+    private final MediatorLiveData<WordsMediatorData> wordsMediatorLiveData = new MediatorLiveData<>();
 
-    // 结合选中wordList和搜索框用户输入两个可观察数据源
-    private final MediatorLiveData<WordsMediator> wordsMediatorLiveData = new MediatorLiveData<>();
-
-    // 单词列表
-    private final LiveData<List<CollectWord>> wordsLiveData = Transformations.switchMap(
-            wordsMediatorLiveData, new Function<WordsMediator, LiveData<List<CollectWord>>>() {
+    private final LiveData<WordBook> usingWordBookLiveData = Transformations.switchMap(
+            usingWordBookIdLiveData, new Function<Long, LiveData<WordBook>>() {
                 @Override
-                public LiveData<List<CollectWord>> apply(WordsMediator input) {
-                    return repository.getMatchWordsFromWordListLiveData(input.wordBookId, input.userSearch);
+                public LiveData<WordBook> apply(Long input) {
+                    Log.d(TAG, "usingWordBookLiveData更新:" + input);
+                    return repository.getWordBookById(input);
+                }
+            });
+    private final LiveData<List<CollectWord>> wordsLiveData = Transformations.switchMap(
+            wordsMediatorLiveData, new Function<WordsMediatorData, LiveData<List<CollectWord>>>() {
+                @Override
+                public LiveData<List<CollectWord>> apply(WordsMediatorData input) {
+                    Log.d(TAG, "wordsLiveData更新:\nusingWordBookId:"+input.usingWordBookId
+                    +"\nuserSearch:"+input.userSearch);
+                    String pattern = input.userSearch.replaceAll("[^a-zA-Z ]", "") + "%";
+                    return repository.getCollectWords(input.usingWordBookId, pattern);
                 }
             });
 
-    // 全部词书
-    private final LiveData<List<WordBook>> wordBooksLiveData;
+
+    @Override
+    protected void onCleared() {
+        PreferenceManager.getDefaultSharedPreferences(getApplication())
+                .unregisterOnSharedPreferenceChangeListener(this);
+        super.onCleared();
+    }
+
 
     public ActivityMainViewModel(@NonNull Application application) {
         super(application);
         repository = DataRepository.getInstance(application);
-
-        usingWordBookLiveData = repository.getUsingWordBookLiveData();
-        wordNumOfUsingBook = Transformations.switchMap(usingWordBookLiveData,
-                input -> repository.getWordNumOfBook(input.getWordBookId()));
-        wordsMediatorLiveData.addSource(usingWordBookLiveData, wordBook -> {
-            if (wordBook != null) {
-                // 词库切换，更新单词集
-                WordsMediator mediator = wordsMediatorLiveData.getValue();
-                String userSearch = mediator != null ? mediator.userSearch : "";
-                wordsMediatorLiveData.postValue(new WordsMediator(wordBook.getWordBookId(), userSearch));
+        prefsMgr = SharedPrefsMgr.getInstance(application);
+        PreferenceManager.getDefaultSharedPreferences(application)
+                .registerOnSharedPreferenceChangeListener(this);
+//        wordNumOfUsingBook = Transformations.switchMap(usingWordBookLiveData,
+//                input -> repository.getWordNumOfBook(input.getWordBookId()));
+        wordBooksLiveData = repository.getWordBooks();
+        wordsMediatorLiveData.addSource(usingWordBookIdLiveData, aLong -> {
+            WordsMediatorData data = wordsMediatorLiveData.getValue();
+            if (data != null) {
+                Log.d(TAG, "wordsMediatorLiveData更新:词书");
+                data.usingWordBookId = aLong;
+                wordsMediatorLiveData.postValue(data);
             }
         });
         wordsMediatorLiveData.addSource(userSearchLiveData, s -> {
             if (!TextUtils.isEmpty(s)) {
-                // 用户搜索框输入内容改变，更新单词集
-                WordsMediator mediator = wordsMediatorLiveData.getValue();
-                long wordBookId = mediator != null ? mediator.wordBookId : 0;
-                wordsMediatorLiveData.postValue(new WordsMediator(wordBookId, s));
+                WordsMediatorData data = wordsMediatorLiveData.getValue();
+                if (data != null) {
+                    Log.d(TAG, "wordsMediatorLiveData更新:搜索");
+                    data.userSearch = s;
+                    wordsMediatorLiveData.postValue(data);
+                }
             }
         });
-        wordBooksLiveData = repository.getWordBooksLiveData();
+        // 初始获取使用中词书
+        long usingWordBookId = prefsMgr.getUsingWordBookId();
+        usingWordBookIdLiveData.postValue(usingWordBookId);
+        // 初始化wordsMediatorLiveData数据
+        wordsMediatorLiveData.postValue(new WordsMediatorData(usingWordBookId, ""));
     }
 
     // 返回单词表
@@ -93,23 +117,17 @@ public class ActivityMainViewModel extends AndroidViewModel {
         return usingWordBookLiveData;
     }
 
-    // 创建词书
-    public void createWordBook(String wordBookName) {
-        repository.createWordBook(wordBookName);
+    // 创建并选中词书
+    public void createAndUseWordBook(String wordBookName) {
+        new Thread(() -> {
+            long newWordBookId = repository.insertWordBookSync(new WordBook(wordBookName));
+            prefsMgr.setUsingWordBookId(newWordBookId);
+        }).start();
     }
 
     // 搜索框输入内容改变时调用
     public void setUserSearch(String input) {
         userSearchLiveData.postValue(input);
-    }
-
-    // 更新学习进度
-    public void setLearningProgress(int learningProgress) {
-        WordBook usingWordBook = usingWordBookLiveData.getValue();
-        if (usingWordBook != null) {
-            usingWordBook.setLearningProgress(learningProgress);
-            repository.updateWordBook(usingWordBook);
-        }
     }
 
     // 构建词典
@@ -129,25 +147,29 @@ public class ActivityMainViewModel extends AndroidViewModel {
         });
     }
 
-    public LiveData<Integer> getWordNumOfUsingBook() {
-        return wordNumOfUsingBook;
-    }
-
-    // 选择单词表
     public void useWordBook(long wordBookId) {
-        repository.useWordBook(wordBookId);
+        prefsMgr.setUsingWordBookId(wordBookId);
     }
 
     public LiveData<Boolean> isWorking() {
         return working;
     }
 
-    public static class WordsMediator {
-        public final long wordBookId;
-        public final String userSearch;
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        if (PrefsConst.USING_WORD_BOOK_ID_KEY.equals(key)) {
+            long usingWordBookId = prefsMgr.getUsingWordBookId();
+            usingWordBookIdLiveData.postValue(usingWordBookId);
+            Log.d(TAG, "使用词书ID更改为:" + usingWordBookId);
+        }
+    }
 
-        private WordsMediator(long wordBookId, String userSearch) {
-            this.wordBookId = wordBookId;
+    public static class WordsMediatorData {
+        public long usingWordBookId;
+        public String userSearch;
+
+        public WordsMediatorData(long usingWordBookId, String userSearch) {
+            this.usingWordBookId = usingWordBookId;
             this.userSearch = userSearch;
         }
     }

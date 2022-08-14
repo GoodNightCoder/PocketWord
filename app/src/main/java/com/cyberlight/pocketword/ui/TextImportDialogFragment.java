@@ -18,45 +18,27 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.cyberlight.pocketword.R;
 
-public class SetProgressDialogFragment extends DialogFragment {
-    public static final String TAG = "SetProgressDialogFragment";
-
-    private int wordNumOfUsingBook;
+public class TextImportDialogFragment extends DialogFragment {
+    public static final String TAG = "TextImportDialogFragment";
 
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        ActivityMainViewModel model = new ViewModelProvider(this).get(ActivityMainViewModel.class);
-        Context context = getContext();
+        ActivityImportViewModel model = new ViewModelProvider(requireActivity()).get(ActivityImportViewModel.class);
+        Context context = requireContext();
         // 设置布局
         LayoutInflater inflater = requireActivity().getLayoutInflater();
         @SuppressLint("InflateParams")
-        View view = inflater.inflate(R.layout.dialog_set_progress, null);
-        TextView titleTv = view.findViewById(R.id.dialog_set_progress_title_tv);
-        EditText inputEt = view.findViewById(R.id.dialog_set_progress_content_tv);
+        View view = inflater.inflate(R.layout.dialog_text_import, null);
+        EditText inputEt = view.findViewById(R.id.dialog_text_import_et);
         TextView negativeTv = view.findViewById(R.id.dialog_btn_bar_negative_tv);
         TextView positiveTv = view.findViewById(R.id.dialog_btn_bar_positive_tv);
-        model.getUsingWordBook().observe(this, wordBook -> {
-            if (wordBook != null) {
-                titleTv.setText(getString(R.string.set_progress_dialog_title, wordBook.getLearningProgress() + 1));
-            } else {
-                dismiss();
-            }
-        });
-        model.getWordNumOfUsingBook().observe(this, integer -> {
-            wordNumOfUsingBook = integer;
-            inputEt.setHint(getString(R.string.set_progress_dialog_hint, wordNumOfUsingBook));
-        });
         positiveTv.setText(R.string.dialog_confirm);
         negativeTv.setText(R.string.dialog_cancel);
         positiveTv.setOnClickListener(v -> {
-            String userInputStr = inputEt.getText().toString();
-            if (TextUtils.isEmpty(userInputStr)) return;
-            int userInputProgress = Integer.parseInt(userInputStr) - 1;
-            if (userInputProgress > 0 || userInputProgress <= wordNumOfUsingBook) {
-                model.setLearningProgress(userInputProgress);
-                dismiss();
-            }
+            String userInputStr = inputEt.getText().toString().trim();
+            model.importWordsFromText(userInputStr);
+            dismiss();
         });
         negativeTv.setOnClickListener(v -> dismiss());
         // 设置对话框

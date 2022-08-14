@@ -3,6 +3,7 @@ package com.cyberlight.pocketword.data.db.entity;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
+import androidx.room.Ignore;
 
 @Entity(
         tableName = "tb_wordbook_word",
@@ -34,7 +35,7 @@ public class WordBookWord {
     @ColumnInfo(name = "import_at", typeAffinity = ColumnInfo.INTEGER)
     private long importAt;
 
-    @ColumnInfo(name = "known", typeAffinity = ColumnInfo.INTEGER)
+    @ColumnInfo(name = "known", typeAffinity = ColumnInfo.INTEGER, defaultValue = "0")
     private boolean known;
 
     public WordBookWord(long wordId, long wordBookId, long importAt, boolean known) {
@@ -42,6 +43,13 @@ public class WordBookWord {
         this.wordBookId = wordBookId;
         this.importAt = importAt;
         this.known = known;
+    }
+
+    @Ignore
+    public WordBookWord(long wordId, long wordBookId, long importAt) {
+        this.wordId = wordId;
+        this.wordBookId = wordBookId;
+        this.importAt = importAt;
     }
 
     public long getWordId() {

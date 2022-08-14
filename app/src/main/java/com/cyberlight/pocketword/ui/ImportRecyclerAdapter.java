@@ -1,14 +1,19 @@
 package com.cyberlight.pocketword.ui;
 
+import android.content.Context;
 import android.text.Editable;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.cyberlight.pocketword.R;
@@ -22,23 +27,26 @@ public class ImportRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     // ViewHolder类型
     private static final int TYPE_ITEM = 0;
     private static final int TYPE_FOOTER = 1;
+    private static final String TAG = "ImportRecyclerAdapter";
 
+    private final Context mContext;
     private final List<Word> mImportWordList;
     private OnAddClickListener mOnAddClickListener;
 
     private static class ItemViewHolder extends RecyclerView.ViewHolder {
-
-        private final EditText mWordEt;
+        private final TextView mWordTv;
         private final EditText mMeanEt;
         private final EditText mAccentEt;
         private final ImageView mDeleteIv;
+        private final int mOriginalColor;
 
         public ItemViewHolder(View v) {
             super(v);
-            mWordEt = v.findViewById(R.id.rv_import_word_et);
+            mWordTv = v.findViewById(R.id.rv_import_word_tv);
             mMeanEt = v.findViewById(R.id.rv_import_mean_et);
             mAccentEt = v.findViewById(R.id.rv_import_accent_et);
             mDeleteIv = v.findViewById(R.id.rv_import_delete_iv);
+            mOriginalColor = mWordTv.getCurrentTextColor();
         }
 
     }
@@ -52,7 +60,8 @@ public class ImportRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         }
     }
 
-    public ImportRecyclerAdapter(List<Word> importWordList) {
+    public ImportRecyclerAdapter(Context context, List<Word> importWordList) {
+        mContext = context;
         mImportWordList = importWordList;
     }
 
@@ -72,28 +81,44 @@ public class ImportRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+//        Log.d(TAG, "onBindViewHolder:" + position);
         if (holder instanceof ItemViewHolder) {
             ItemViewHolder itemViewHolder = (ItemViewHolder) holder;
             itemViewHolder.mDeleteIv.setOnClickListener(v -> {
-                mImportWordList.remove(holder.getAdapterPosition());
-                notifyDataSetChanged();
-            });
-            itemViewHolder.mWordEt.setText(mImportWordList.get(holder.getAdapterPosition()).getWordStr());
-            itemViewHolder.mWordEt.addTextChangedListener(new TextWatcherAdapter() {
-                @Override
-                public void afterTextChanged(Editable s) {
-                    mImportWordList.get(holder.getAdapterPosition()).setWordStr(s.toString());
+                int pos = holder.getAdapterPosition();
+                // 用户快速点击删除item按钮时，getAdapterPosition()
+                // 可能来不及返回最新的position，而是返回NO_POSITION
+                if (pos != RecyclerView.NO_POSITION) {
+                    Log.d(TAG, String.valueOf(pos));
+                    Log.d(TAG, mImportWordList.get(pos).getWordStr());
+                    mImportWordList.remove(pos);
+                    notifyItemRemoved(pos);
                 }
             });
-            itemViewHolder.mMeanEt.setText(mImportWordList.get(holder.getAdapterPosition()).getMean());
+            Word word = mImportWordList.get(holder.getAdapterPosition());
+            itemViewHolder.mWordTv.setText(word.getWordStr());
+            itemViewHolder.mMeanEt.setText(word.getMean());
+            itemViewHolder.mAccentEt.setText(word.getAccent());
+            // 初始化颜色
+            if (word.getMean() == null || TextUtils.isEmpty(word.getMean().trim())) {
+                itemViewHolder.mWordTv.setTextColor(ContextCompat.getColor(mContext, R.color.red));
+            } else if (word.getWordId() != -1) {
+                itemViewHolder.mWordTv.setTextColor(ContextCompat.getColor(mContext, R.color.green));
+            }
             itemViewHolder.mMeanEt.addTextChangedListener(new TextWatcherAdapter() {
                 @Override
                 public void afterTextChanged(Editable s) {
-                    mImportWordList.get(holder.getAdapterPosition()).setMean(s.toString());
+                    Word w = mImportWordList.get(holder.getAdapterPosition());
+                    w.setMean(s.toString());
+                    if (word.getMean() == null || TextUtils.isEmpty(w.getMean().trim())) {
+                        itemViewHolder.mWordTv.setTextColor(ContextCompat.getColor(mContext, R.color.red));
+                    } else if (w.getWordId() != -1) {
+                        itemViewHolder.mWordTv.setTextColor(ContextCompat.getColor(mContext, R.color.green));
+                    } else {
+                        itemViewHolder.mWordTv.setTextColor(itemViewHolder.mOriginalColor);
+                    }
                 }
             });
-
-            itemViewHolder.mAccentEt.setText(mImportWordList.get(holder.getAdapterPosition()).getAccent());
             itemViewHolder.mAccentEt.addTextChangedListener(new TextWatcherAdapter() {
                 @Override
                 public void afterTextChanged(Editable s) {

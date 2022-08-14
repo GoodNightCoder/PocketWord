@@ -24,8 +24,7 @@
         <activity
             android:name=".ui.MainActivity"
             android:exported="true"
-            android:launchMode="singleTask"
-            android:screenOrientation="portrait">
+            android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -35,8 +34,7 @@
         <activity
             android:name=".ui.ImportActivity"
             android:exported="true"
-            android:launchMode="singleTop"
-            android:screenOrientation="portrait">
+            android:launchMode="singleTop">
             <!-- 文件分享关联 -->
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
@@ -62,18 +60,16 @@
             android:name=".ui.PlayActivity"
             android:exported="false"
             android:launchMode="singleTop"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".ui.StatisticsActivity"
             android:exported="false"
             android:launchMode="singleTop"
-            android:screenOrientation="portrait"
             android:theme="@style/Theme.PocketWord.StatisticsActivity" />
         <activity
             android:name=".ui.SettingsActivity"
             android:exported="false"
-            android:launchMode="singleTop"
-            android:screenOrientation="portrait" />
+            android:launchMode="singleTop" />
 
         <service
             android:name=".service.DownloadAudioService"

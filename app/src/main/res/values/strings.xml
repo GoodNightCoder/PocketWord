@@ -62,4 +62,14 @@
     <string name="continuous_completions">Continuous Completions</string>
     <string name="count_trend">Count Trend</string>
     <string name="duration_trend">Duration Trend</string>
+    <string name="create_word_book_hint">(Word book name)</string>
+    <string name="invalid_meaning_toast">Word[%1$s] has an invalid meaning</string>
+    <string name="dialog_yes">Yes</string>
+    <string name="dialog_no">No</string>
+    <string name="dialog_confirm_import_tv_text">Detected that some words in the dictionary conflicts with the words to be imported. Do you want to replace them?</string>
+    <string name="settings_study_header">Study</string>
+    <string name="settings_skip_known_title">Skip Known</string>
+    <string name="settings_daily_goal_title">Daily Goal</string>
+    <string name="play_known_tv_known">Known</string>
+    <string name="play_known_tv_unknown">Unknown</string>
 </resources>

@@ -17,7 +17,7 @@ import java.util.List;
 @Dao
 public interface RecordDao {
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert
     ListenableFuture<Void> insertRecord(Record record);
 
     @Update

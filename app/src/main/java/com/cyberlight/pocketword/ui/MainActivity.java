@@ -138,12 +138,6 @@ public class MainActivity extends AppCompatActivity {
                         // fixme:
 //                        setDeleteMode(true);
                         return true;
-                    case R.id.main_more_progress:
-                        if (fragmentManager.findFragmentByTag(SetProgressDialogFragment.TAG) == null) {
-                            DialogFragment dialogFragment = new SetProgressDialogFragment();
-                            dialogFragment.show(getSupportFragmentManager(), SetProgressDialogFragment.TAG);
-                        }
-                        return true;
                     case R.id.main_more_download_audio:
                         // 启动服务下载单词音频
                         Intent downloadServiceIntent = new Intent(this, DownloadAudioService.class);

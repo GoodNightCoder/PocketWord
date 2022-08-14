@@ -3,10 +3,10 @@ package com.cyberlight.pocketword.data.db;
 import android.content.Context;
 
 import androidx.lifecycle.LiveData;
+import androidx.room.Query;
 
 import com.cyberlight.pocketword.model.CollectWord;
 import com.cyberlight.pocketword.data.db.entity.Record;
-import com.cyberlight.pocketword.data.db.entity.Settings;
 import com.cyberlight.pocketword.data.db.entity.Word;
 import com.cyberlight.pocketword.data.db.entity.WordBook;
 import com.cyberlight.pocketword.data.db.entity.WordBookWord;
@@ -34,107 +34,64 @@ public class DataRepository {
         return sInstance;
     }
 
-    /**
-     * 下载单词音频时用于更新audio字段
-     */
+    public long insertWordSync(Word word) {
+        return database.wordDao().insertWordSync(word);
+    }
+
+    public void updateWordSync(Word word) {
+        database.wordDao().updateWordSync(word);
+    }
+
     public void updateWord(Word word) {
         database.wordDao().updateWord(word);
     }
 
-    /**
-     * 获取指定词书中的匹配单词，app主页用
-     */
-    public LiveData<List<CollectWord>> getMatchWordsFromWordListLiveData(long wordBookId, String query) {
-        String pattern = query.replaceAll("[^a-zA-Z ]", "") + "%";
-        return database.collectWordDao().getMatchWordsFromWordBookLiveData(wordBookId, pattern);
+    public LiveData<List<CollectWord>> getCollectWords(long wordBookId, String pattern) {
+        return database.collectWordDao().getCollectWords(wordBookId, pattern);
     }
 
-    /**
-     * PlayActivity用
-     *
-     * @param wordBookId
-     * @return
-     */
-    public List<CollectWord> getCollectWordsFromWordBookSync(long wordBookId) {
-        return database.collectWordDao().getCollectWordsFromWordBookSync(wordBookId);
+    public List<CollectWord> getCollectWordsSync(long wordBookId) {
+        return database.collectWordDao().getCollectWordsSync(wordBookId);
     }
 
-    /**
-     * 音频下载服务用
-     */
-    public List<Word> getWordsFromWordBookSync(long wordBookId) {
-        return database.wordDao().getWordsFromWordBookSync(wordBookId);
+    public List<Word> getWordsFromBookSync(long wordBookId) {
+        return database.wordDao().getWordsFromBookSync(wordBookId);
     }
 
-    /**
-     * ImportActivity自动补全时用
-     */
     public Word getMatchWordSync(String wordStr) {
         return database.wordDao().getMatchWordSync(wordStr);
     }
 
-    /**
-     * 异步获取用户正在使用的词书
-     */
-    public LiveData<WordBook> getUsingWordBookLiveData() {
-        return database.wordBookDao().getUsingWordBookLiveData();
+    public LiveData<WordBook> getWordBookById(long wordBookId) {
+        return database.wordBookDao().getWordBookById(wordBookId);
     }
 
-    /**
-     * 同步获取用户正在使用的词书
-     */
-    public WordBook getUsingWordBookSync() {
-        return database.wordBookDao().getUsingWordBookSync();
+    public WordBook getWordBookByIdSync(long wordBookId) {
+        return database.wordBookDao().getWordBookByIdSync(wordBookId);
     }
 
-    /**
-     * 获取全部词书
-     */
-    public LiveData<List<WordBook>> getWordBooksLiveData() {
-        return database.wordBookDao().getWordBooksLiveData();
+    public LiveData<List<WordBook>> getWordBooks() {
+        return database.wordBookDao().getWordBooks();
     }
 
-    /**
-     * 创建词书
-     *
-     * @param wordBookName
-     */
-    public void createWordBook(String wordBookName) {
-        new Thread(() -> {
-            long newWordBookId = database.wordBookDao().insertWordBookSync(new WordBook(wordBookName, 0));
-            // TODO: 测试返回的id是否正确
-            useWordBook(newWordBookId);
-        }).start();
+    public long insertWordBookSync(WordBook wordBook) {
+        return database.wordBookDao().insertWordBookSync(wordBook);
     }
 
-    /**
-     * 使用词书
-     */
-    public void useWordBook(long wordBookId) {
-        database.settingsDao().insertSettings(new Settings(1, wordBookId));
-    }
-
-    /**
-     * 更新书本
-     */
     public void updateWordBook(WordBook wordBook) {
         database.wordBookDao().updateWordBook(wordBook);
     }
 
-    /**
-     * 将单词导入指定词书，app主页more菜单用
-     */
-    public void importWordToWordBook(long wordId, long wordBookId) {
-        database.wordBookWordDao().insertWordBookWordSync(
-                new WordBookWord(wordId, wordBookId, System.currentTimeMillis(), false)
-        );
+    public void insertWordBookWord(WordBookWord wordBookWord) {
+        database.wordBookWordDao().insertWordBookWordSync(wordBookWord);
     }
 
-    /**
-     * 获取词书的词汇数
-     */
-    public LiveData<Integer> getWordNumOfBook(long wordBookId) {
-        return database.wordBookWordDao().getWordNumOfBook(wordBookId);
+    public void updateWordBookWordSync(WordBookWord wordBookWord) {
+        database.wordBookWordDao().updateWordBookWordSync(wordBookWord);
+    }
+
+    public WordBookWord getWordBookWordSync(long wordId, long wordBookId) {
+        return database.wordBookWordDao().getWordBookWordSync(wordId, wordBookId);
     }
 
     /**
@@ -146,14 +103,11 @@ public class DataRepository {
         Futures.addCallback(future, callback, context.getMainExecutor());
     }
 
-    /**
-     * PlayActivity用
-     */
     public Record getRecordByDateSync(LocalDate date) {
         return database.recordDao().getRecordByDateSync(date);
     }
 
-    public LiveData<List<Record>> getRecordsAfter(LocalDate date){
+    public LiveData<List<Record>> getRecordsAfter(LocalDate date) {
         return database.recordDao().getRecordsAfter(date);
     }
 
@@ -163,6 +117,10 @@ public class DataRepository {
 
     public void insertRecord(Record record) {
         database.recordDao().insertRecord(record);
+    }
+
+    public void updateRecord(Record record) {
+        database.recordDao().updateRecord(record);
     }
 
 }

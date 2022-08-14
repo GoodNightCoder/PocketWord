@@ -16,7 +16,7 @@ public class WordBook {
     @ColumnInfo(name = "word_book_name", typeAffinity = ColumnInfo.TEXT)
     private String wordBookName;
 
-    @ColumnInfo(name = "learning_progress", typeAffinity = ColumnInfo.INTEGER)
+    @ColumnInfo(name = "learning_progress", typeAffinity = ColumnInfo.INTEGER, defaultValue = "0")
     private int learningProgress;
 
     public WordBook(long wordBookId, @NonNull String wordBookName, int learningProgress) {
@@ -25,10 +25,10 @@ public class WordBook {
         this.learningProgress = learningProgress;
     }
 
+    // 新建词书时使用该构造方法
     @Ignore
-    public WordBook(@NonNull String wordBookName, int learningProgress) {
+    public WordBook(@NonNull String wordBookName) {
         this.wordBookName = wordBookName;
-        this.learningProgress = learningProgress;
     }
 
     public long getWordBookId() {

@@ -4,46 +4,58 @@ import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
-import androidx.lifecycle.ViewModelProvider;
 
 import com.cyberlight.pocketword.R;
 
-public class CreateWordBookDialogFragment extends DialogFragment {
-    public static final String TAG = "CreateWordBookDialogFragment";
+public class ConfirmImportDialogFragment extends DialogFragment {
+    public static final String TAG = "ConfirmImportDialogFragment";
+
+    public interface NoticeDialogListener {
+        void onDialogPositiveClick();
+
+        void onDialogNegativeClick();
+    }
+
+    private NoticeDialogListener mNoticeDialogListener;
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        try {
+            mNoticeDialogListener = (NoticeDialogListener) context;
+        } catch (ClassCastException e) {
+            throw new ClassCastException("Import activity must implement NoticeDialogListener");
+        }
+    }
 
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        ActivityMainViewModel model = new ViewModelProvider(requireActivity()).get(ActivityMainViewModel.class);
         Context context = requireContext();
         // 设置布局
         LayoutInflater inflater = requireActivity().getLayoutInflater();
         @SuppressLint("InflateParams")
-        View view = inflater.inflate(R.layout.dialog_create_wordbook, null);
-        EditText inputEt = view.findViewById(R.id.dialog_create_wordbook_input_et);
+        View view = inflater.inflate(R.layout.dialog_confirm_import, null);
         TextView negativeTv = view.findViewById(R.id.dialog_btn_bar_negative_tv);
         TextView positiveTv = view.findViewById(R.id.dialog_btn_bar_positive_tv);
-        positiveTv.setText(R.string.dialog_confirm);
-        negativeTv.setText(R.string.dialog_cancel);
+        positiveTv.setText(R.string.dialog_yes);
+        negativeTv.setText(R.string.dialog_no);
         positiveTv.setOnClickListener(v -> {
-            String userInputStr = inputEt.getText().toString().trim();
-            if (TextUtils.isEmpty(userInputStr)) return;
-            model.createAndUseWordBook(userInputStr);
+            mNoticeDialogListener.onDialogPositiveClick();
             dismiss();
         });
-        negativeTv.setOnClickListener(v -> dismiss());
+        negativeTv.setOnClickListener(v -> {
+            mNoticeDialogListener.onDialogNegativeClick();
+            dismiss();
+        });
         // 设置对话框
         Dialog dialog = new Dialog(context, R.style.FadeAnimDialog);
         dialog.setContentView(view);

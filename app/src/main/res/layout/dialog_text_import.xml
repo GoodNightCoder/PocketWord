@@ -1,22 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+android:layout_width="match_parent"
+android:layout_height="wrap_content"
+android:background="@drawable/bg_dialog_rc_20"
+android:orientation="vertical">
+
+<EditText
+    android:id="@+id/dialog_text_import_et"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:maxLines="20"
+    android:layout_margin="15dp"
+    android:background="@null"
+    android:hint="@string/dialog_text_import_et_hint" />
 
-    <EditText
-        android:id="@+id/dialog_text_import_et"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="15dp"
-        android:background="@null"
-        android:hint="@string/dialog_text_import_et_hint" />
-
-    <Button
-        android:id="@+id/dialog_text_import_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:text="@string/dialog_text_import_confirm"
-        android:textAllCaps="false" />
+<include layout="@layout/dialog_btn_bar" />
 </LinearLayout>

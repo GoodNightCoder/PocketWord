@@ -27,15 +27,13 @@ public interface WordBookDao {
     @Delete
     ListenableFuture<Void> deleteWordBook(WordBook wordBook);
 
-    @Query("SELECT tb_wordbook.* FROM tb_settings " +
-            "INNER JOIN tb_wordbook ON tb_settings.word_book_id = tb_wordbook.word_book_id")
-    LiveData<WordBook> getUsingWordBookLiveData();
-
-    @Query("SELECT tb_wordbook.* FROM tb_settings " +
-            "INNER JOIN tb_wordbook ON tb_settings.word_book_id = tb_wordbook.word_book_id")
-    WordBook getUsingWordBookSync();
+    @Query("SELECT * FROM tb_wordbook WHERE word_book_id = :wordBookId")
+    WordBook getWordBookByIdSync(long wordBookId);
 
     @Query("SELECT * FROM tb_wordbook")
-    LiveData<List<WordBook>> getWordBooksLiveData();
+    LiveData<List<WordBook>> getWordBooks();
+
+    @Query("SELECT * FROM tb_wordbook WHERE word_book_id = :wordBookId")
+    LiveData<WordBook> getWordBookById(long wordBookId);
 
 }

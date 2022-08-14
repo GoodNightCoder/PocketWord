@@ -67,12 +67,13 @@ public class DownloadAudioService extends Service {
         new Thread(() -> {
             // 读取词库
             DataRepository repository = DataRepository.getInstance(this);
-            WordBook usingWordBook = repository.getUsingWordBookSync();
+            WordBook usingWordBook = null;
+//            WordBook usingWordBook = repository.getUsingWordBookSync();
             if (usingWordBook == null) {
                 stopSelf();
                 return;
             }
-            List<Word> words = repository.getWordsFromWordBookSync(usingWordBook.getWordBookId());
+            List<Word> words = repository.getWordsFromBookSync(usingWordBook.getWordBookId());
             if (words == null) {
                 stopSelf();
                 return;

@@ -22,6 +22,7 @@
         android:layout_marginTop="10dp"
         android:layout_marginBottom="15dp"
         android:inputType="text"
+        android:hint="@string/create_word_book_hint"
         android:textSize="16sp" />
 
     <include layout="@layout/dialog_btn_bar" />

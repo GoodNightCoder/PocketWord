@@ -48,19 +48,6 @@ public class SharedPrefsMgr implements PrefsMgr {
         editor.apply();
     }
 
-    @PrefsConst.OrderType
-    @Override
-    public int getSortOrder() {
-        return mSharedPreferences.getInt(PrefsConst.SORT_ORDER_KEY, PrefsConst.ORDER_BY_ALPHABET_ASC);
-    }
-
-    @Override
-    public void setSortOrder(@PrefsConst.OrderType int sortOrder) {
-        SharedPreferences.Editor editor = mSharedPreferences.edit();
-        editor.putInt(PrefsConst.SORT_ORDER_KEY, sortOrder);
-        editor.apply();
-    }
-
     @Override
     public long getUsingWordBookId() {
         return mSharedPreferences.getLong(PrefsConst.USING_WORD_BOOK_ID_KEY, 0);
@@ -70,6 +57,30 @@ public class SharedPrefsMgr implements PrefsMgr {
     public void setUsingWordBookId(long usingWordBookId) {
         SharedPreferences.Editor editor = mSharedPreferences.edit();
         editor.putLong(PrefsConst.USING_WORD_BOOK_ID_KEY, usingWordBookId);
+        editor.apply();
+    }
+
+    @Override
+    public boolean isSkipKnown() {
+        return mSharedPreferences.getBoolean(PrefsConst.SKIP_KNOWN_KEY, true);
+    }
+
+    @Override
+    public void setSkipKnown(boolean skipKnown) {
+        SharedPreferences.Editor editor = mSharedPreferences.edit();
+        editor.putBoolean(PrefsConst.SKIP_KNOWN_KEY, skipKnown);
+        editor.apply();
+    }
+
+    @Override
+    public int getDailyGoal() {
+        return mSharedPreferences.getInt(PrefsConst.DAILY_GOAL_KEY, 80);
+    }
+
+    @Override
+    public void setDailyGoal(int dailyGoal) {
+        SharedPreferences.Editor editor = mSharedPreferences.edit();
+        editor.putInt(PrefsConst.DAILY_GOAL_KEY, dailyGoal);
         editor.apply();
     }
 }

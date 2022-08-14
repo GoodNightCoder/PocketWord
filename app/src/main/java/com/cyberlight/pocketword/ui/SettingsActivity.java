@@ -16,6 +16,7 @@ import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
+import androidx.preference.PreferenceManager;
 
 import com.cyberlight.pocketword.R;
 import com.cyberlight.pocketword.data.pref.PrefsConst;
@@ -41,6 +42,7 @@ public class SettingsActivity extends AppCompatActivity {
         }
         ImageView backIv = findViewById(R.id.settings_back_iv);
         backIv.setOnClickListener(v -> finish());
+
     }
 
     public static class SettingsFragment extends PreferenceFragmentCompat

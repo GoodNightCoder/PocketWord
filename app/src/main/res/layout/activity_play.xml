@@ -89,6 +89,17 @@
         android:textSize="15sp"
         app:layout_constraintTop_toBottomOf="@+id/play_word_tv" />
 
+    <TextView
+        android:id="@+id/play_known_tv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="50dp"
+        android:background="@drawable/bg_btn_rc_8"
+        android:gravity="center"
+        android:paddingVertical="10dp"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+        app:layout_constraintBottom_toTopOf="@id/play_control_panel" />
+
     <LinearLayout
         android:id="@+id/play_control_panel"
         android:layout_width="match_parent"
@@ -111,59 +122,38 @@
             android:layout_marginHorizontal="44dp"
             android:layout_marginBottom="20dp" />
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <androidx.appcompat.widget.SwitchCompat
-                android:id="@+id/play_sound_switch"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="end|center_vertical"
-                android:paddingEnd="40dp"
-                android:text="@string/play_sound_switch_text"
-                android:textColor="?android:attr/textColorSecondary" />
-
-            <androidx.appcompat.widget.SwitchCompat
-                android:id="@+id/play_skip_switch"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="end|center_vertical"
-                android:paddingEnd="40dp"
-                android:text="@string/play_skip_switch_text"
-                android:textColor="?android:attr/textColorSecondary" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_height="wrap_content">
 
             <androidx.appcompat.widget.SwitchCompat
                 android:id="@+id/play_word_switch"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="end|center_vertical"
-                android:paddingEnd="40dp"
+                android:layout_centerVertical="true"
+                android:layout_toStartOf="@id/play_mean_switch"
                 android:text="@string/play_word_switch_text"
                 android:textColor="?android:attr/textColorSecondary" />
 
             <androidx.appcompat.widget.SwitchCompat
                 android:id="@+id/play_mean_switch"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="end|center_vertical"
-                android:paddingEnd="40dp"
+                android:layout_centerInParent="true"
+                android:layout_marginHorizontal="15dp"
                 android:text="@string/play_mean_switch_text"
                 android:textColor="?android:attr/textColorSecondary" />
 
-        </LinearLayout>
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/play_sound_switch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toEndOf="@id/play_mean_switch"
+                android:text="@string/play_sound_switch_text"
+                android:textColor="?android:attr/textColorSecondary" />
+
+        </RelativeLayout>
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

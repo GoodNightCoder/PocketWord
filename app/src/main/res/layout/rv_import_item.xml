@@ -20,13 +20,11 @@
             android:layout_gravity="center_vertical"
             android:orientation="vertical">
 
-            <EditText
-                android:id="@+id/rv_import_word_et"
+            <TextView
+                android:id="@+id/rv_import_word_tv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@null"
                 android:gravity="center_vertical"
-                android:hint="@string/rv_import_word_hint"
                 android:layout_marginBottom="5dp"
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
                 android:textSize="16sp" />
@@ -59,7 +57,7 @@
             android:layout_gravity="center_vertical"
             android:layout_weight="1"
             android:src="@drawable/ic_baseline_close_24"
-            app:tint="?attr/colorControlNormal"
+            app:tint="@color/red"
             tools:ignore="ContentDescription" />
     </LinearLayout>
 

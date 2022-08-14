@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_dialog_rc_20"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/dialog_confirm_import_tv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="15dp"
+        android:text="@string/dialog_confirm_import_tv_text" />
+
+    <include layout="@layout/dialog_btn_bar" />
+</LinearLayout>

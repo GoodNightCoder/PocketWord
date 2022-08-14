@@ -9,11 +9,15 @@ public interface PrefsMgr {
 
     void setStudyRemind(boolean studyRemind);
 
-    int getSortOrder();
-
-    void setSortOrder(int sortOrder);
-
     long getUsingWordBookId();
 
     void setUsingWordBookId(long usingWordBookId);
+
+    boolean isSkipKnown();
+
+    void setSkipKnown(boolean skipKnown);
+
+    int getDailyGoal();
+
+    void setDailyGoal(int dailyGoal);
 }
