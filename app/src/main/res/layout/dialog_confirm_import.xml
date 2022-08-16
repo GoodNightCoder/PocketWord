@@ -10,7 +10,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="15dp"
-        android:text="@string/dialog_confirm_import_tv_text" />
+        android:text="@string/dialog_confirm_import_tv_text"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:textSize="16sp" />
 
     <include layout="@layout/dialog_btn_bar" />
 </LinearLayout>

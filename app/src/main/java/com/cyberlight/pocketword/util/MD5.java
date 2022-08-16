@@ -67,13 +67,12 @@ public class MD5 {
         try {
             MessageDigest messagedigest = MessageDigest.getInstance("MD5");
             byte[] buffer = new byte[1024];
-            int read = 0;
+            int read;
             while ((read = in.read(buffer)) != -1) {
                 messagedigest.update(buffer, 0, read);
             }
             in.close();
-            String result = byteArrayToHex(messagedigest.digest());
-            return result;
+            return byteArrayToHex(messagedigest.digest());
         } catch (NoSuchAlgorithmException | IOException e) {
             e.printStackTrace();
         }

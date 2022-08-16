@@ -15,7 +15,7 @@
         <item name="android:windowLightStatusBar">true</item>
         <item name="wordForegroundColor">@color/light_gray</item>
         <item name="shadowColor">@color/gray</item>
-        <item name="statisticsBgColor">@color/light_purple</item>
+        <item name="statisticsBgColor">@color/light_blue_gray</item>
     </style>
 
     <style name="Theme.PocketWord.StatisticsActivity" parent="Theme.PocketWord">

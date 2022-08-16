@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_dialog_rc_20"
+    android:orientation="vertical">
+
+    <com.cyberlight.pocketword.widget.IntegerWheelPicker
+        android:id="@+id/dialog_set_goal_wp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginBottom="10dp"
+        app:digitsEnable="false"
+        app:maxValue="1000"
+        app:minValue="1" />
+
+    <include layout="@layout/dialog_btn_bar" />
+</LinearLayout>

@@ -52,6 +52,13 @@ public class WordBookWord {
         this.importAt = importAt;
     }
 
+    // 删除时用
+    @Ignore
+    public WordBookWord(long wordId, long wordBookId) {
+        this.wordId = wordId;
+        this.wordBookId = wordBookId;
+    }
+
     public long getWordId() {
         return wordId;
     }

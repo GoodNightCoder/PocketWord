@@ -1,13 +1,13 @@
 package com.cyberlight.pocketword.ui;
 
 import android.os.Bundle;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.Observer;
 
+import com.cyberlight.pocketword.data.pref.PrefsMgr;
+import com.cyberlight.pocketword.data.pref.SharedPrefsMgr;
 import com.cyberlight.pocketword.model.LineChartData;
 import com.cyberlight.pocketword.R;
 import com.cyberlight.pocketword.data.db.DataRepository;
@@ -38,27 +38,6 @@ public class StatisticsActivity extends AppCompatActivity {
         TextView dailyAverCountTv = findViewById(R.id.daily_aver_count_tv);
         TextView dailyAverDuraTv = findViewById(R.id.daily_aver_dura_tv);
         backIv.setOnClickListener(v -> finish());
-
-        // TODO: 测试用，记得删除
-        Button testButton = findViewById(R.id.statistics_test_btn);
-        testButton.setOnClickListener(v -> {
-            new Thread(() -> {
-                LocalDate today = LocalDate.now();
-                for (int i = DAYS_NUM - 1; i >= 0; i--) {
-                    LocalDate date = today.minusDays(i);
-                    int studyCount = (int) (Math.random() * 500);
-                    long studyDuration = (long) (Math.random() * 60000 * 60);
-
-                    mRepository.insertRecord(new Record(date, studyCount, studyDuration));
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }).start();
-
-        });
         countLineChartView.setBgDateFormat(date -> {
             String pattern = getString(R.string.statistics_count_lc_bg_date_format);
             final DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern);
@@ -149,28 +128,26 @@ public class StatisticsActivity extends AppCompatActivity {
             }
             dailyAverCountTv.setText(String.valueOf(sumCount / studyCounts.size()));
             int averMin = sumMin / studyMins.size();
-            // fixme:此处的字符串资源重复使用了
             dailyAverDuraTv.setText(getString(R.string.statistics_daily_aver_dura_format, averMin / 60, averMin % 60));
             countLineChartView.setDataList(studyCounts);
             durationLineChartView.setDataList(studyMins);
         });
-        mRepository.getRecordsByStudyCount(200).observe(this, new Observer<List<Record>>() {
-            @Override
-            public void onChanged(List<Record> records) {
-                if (records != null && records.size() > 0) {
-                    LocalDate date = LocalDate.now();
-                    int continuousCompletionsCount = 0;
-                    for (int i = records.size() - 1; i >= 0; i--) {
-                        if (!date.equals(records.get(i).getDate())) break;
-                        continuousCompletionsCount++;
-                        date = date.minusDays(1);
-                    }
-                    totalCompletionTv.setText(String.valueOf(records.size()));
-                    continuousCompletionTv.setText(String.valueOf(continuousCompletionsCount));
-                } else {
-                    totalCompletionTv.setText(String.valueOf(0));
-                    continuousCompletionTv.setText(String.valueOf(0));
+        PrefsMgr prefsMgr = SharedPrefsMgr.getInstance(this);
+        int dailyGoal = prefsMgr.getDailyGoal();
+        mRepository.getRecordsByStudyCount(dailyGoal).observe(this, records -> {
+            if (records != null && records.size() > 0) {
+                LocalDate date = LocalDate.now();
+                int continuousCompletionsCount = 0;
+                for (int i = records.size() - 1; i >= 0; i--) {
+                    if (!date.equals(records.get(i).getDate())) break;
+                    continuousCompletionsCount++;
+                    date = date.minusDays(1);
                 }
+                totalCompletionTv.setText(String.valueOf(records.size()));
+                continuousCompletionTv.setText(String.valueOf(continuousCompletionsCount));
+            } else {
+                totalCompletionTv.setText(String.valueOf(0));
+                continuousCompletionTv.setText(String.valueOf(0));
             }
         });
     }

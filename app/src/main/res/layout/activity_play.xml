@@ -58,12 +58,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="30dp"
+        android:layout_marginBottom="10dp"
         android:gravity="center"
+        android:maxLines="1"
         android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
         android:textSize="30sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.41000003"
+        app:layout_constraintBottom_toTopOf="@+id/play_accent_tv"
         tools:layout_editor_absoluteX="30dp" />
 
     <TextView
@@ -73,6 +73,7 @@
         android:layout_marginHorizontal="30dp"
         android:layout_marginTop="40dp"
         android:gravity="center"
+        android:maxLines="1"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:textSize="16sp"
         app:layout_constraintTop_toBottomOf="@+id/play_accent_tv" />
@@ -82,31 +83,46 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="30dp"
-        android:layout_marginTop="10dp"
         android:gravity="center"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:textColor="?android:attr/textColorSecondary"
         android:textSize="15sp"
-        app:layout_constraintTop_toBottomOf="@+id/play_word_tv" />
+        app:layout_constraintBottom_toTopOf="@+id/guideline4"
+        tools:layout_editor_absoluteX="30dp" />
 
-    <TextView
-        android:id="@+id/play_known_tv"
-        android:layout_width="match_parent"
+    <ImageView
+        android:id="@+id/play_known_iv"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="50dp"
-        android:background="@drawable/bg_btn_rc_8"
-        android:gravity="center"
-        android:paddingVertical="10dp"
-        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
-        app:layout_constraintBottom_toTopOf="@id/play_control_panel" />
+        android:background="@drawable/bg_known_btn"
+        android:padding="8dp"
+        android:src="@drawable/ic_baseline_check_24"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@id/play_control_panel"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guideline4"
+        app:layout_constraintVertical_bias="0.8" />
 
     <LinearLayout
         android:id="@+id/play_control_panel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="?android:attr/colorBackgroundFloating"
+        android:elevation="10dp"
         android:orientation="vertical"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="parent">
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:visibility="visible">
+
+        <SeekBar
+            android:id="@+id/seek_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="44dp"
+            android:layout_marginTop="10dp"/>
 
         <TextView
             android:id="@+id/play_delay_tv"
@@ -115,23 +131,17 @@
             android:layout_marginBottom="5dp"
             android:gravity="center" />
 
-        <SeekBar
-            android:id="@+id/seek_bar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="44dp"
-            android:layout_marginBottom="20dp" />
-
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="60dp">
 
             <androidx.appcompat.widget.SwitchCompat
                 android:id="@+id/play_word_switch"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_toStartOf="@id/play_mean_switch"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
                 android:text="@string/play_word_switch_text"
                 android:textColor="?android:attr/textColorSecondary" />
 
@@ -139,8 +149,8 @@
                 android:id="@+id/play_mean_switch"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:layout_marginHorizontal="15dp"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
                 android:text="@string/play_mean_switch_text"
                 android:textColor="?android:attr/textColorSecondary" />
 
@@ -148,12 +158,28 @@
                 android:id="@+id/play_sound_switch"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_toEndOf="@id/play_mean_switch"
+                android:layout_below="@id/play_word_switch"
+                android:layout_alignParentStart="true"
                 android:text="@string/play_sound_switch_text"
+                android:textColor="?android:attr/textColorSecondary" />
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/play_know_switch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/play_word_switch"
+                android:layout_alignParentEnd="true"
+                android:text="@string/play_know_switch_text"
                 android:textColor="?android:attr/textColorSecondary" />
 
         </RelativeLayout>
     </LinearLayout>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.500684" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -2,7 +2,6 @@ package com.cyberlight.pocketword.ui;
 
 import android.app.Application;
 import android.content.SharedPreferences;
-import android.text.TextUtils;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -52,8 +51,8 @@ public class ActivityMainViewModel extends AndroidViewModel
             wordsMediatorLiveData, new Function<WordsMediatorData, LiveData<List<CollectWord>>>() {
                 @Override
                 public LiveData<List<CollectWord>> apply(WordsMediatorData input) {
-                    Log.d(TAG, "wordsLiveData更新:\nusingWordBookId:"+input.usingWordBookId
-                    +"\nuserSearch:"+input.userSearch);
+                    Log.d(TAG, "wordsLiveData更新:\nusingWordBookId:" + input.usingWordBookId
+                            + "\nuserSearch:" + input.userSearch);
                     String pattern = input.userSearch.replaceAll("[^a-zA-Z ]", "") + "%";
                     return repository.getCollectWords(input.usingWordBookId, pattern);
                 }
@@ -74,8 +73,6 @@ public class ActivityMainViewModel extends AndroidViewModel
         prefsMgr = SharedPrefsMgr.getInstance(application);
         PreferenceManager.getDefaultSharedPreferences(application)
                 .registerOnSharedPreferenceChangeListener(this);
-//        wordNumOfUsingBook = Transformations.switchMap(usingWordBookLiveData,
-//                input -> repository.getWordNumOfBook(input.getWordBookId()));
         wordBooksLiveData = repository.getWordBooks();
         wordsMediatorLiveData.addSource(usingWordBookIdLiveData, aLong -> {
             WordsMediatorData data = wordsMediatorLiveData.getValue();
@@ -86,7 +83,7 @@ public class ActivityMainViewModel extends AndroidViewModel
             }
         });
         wordsMediatorLiveData.addSource(userSearchLiveData, s -> {
-            if (!TextUtils.isEmpty(s)) {
+            if (s != null) {
                 WordsMediatorData data = wordsMediatorLiveData.getValue();
                 if (data != null) {
                     Log.d(TAG, "wordsMediatorLiveData更新:搜索");
@@ -130,26 +127,14 @@ public class ActivityMainViewModel extends AndroidViewModel
         userSearchLiveData.postValue(input);
     }
 
-    // 构建词典
-    // fixme： 数据库设计完成后去除
-    public void importWordsToDict(List<Word> words) {
-        working.postValue(true);
-        repository.insertWords(getApplication(), words, new FutureCallback<Void>() {
-            @Override
-            public void onSuccess(Void result) {
-                working.postValue(false);
-            }
-
-            @Override
-            public void onFailure(@NonNull Throwable t) {
-                working.postValue(false);
-            }
-        });
+    public void useWordBook(WordBook wordBook) {
+        prefsMgr.setUsingWordBookId(wordBook.getWordBookId());
     }
 
-    public void useWordBook(long wordBookId) {
-        prefsMgr.setUsingWordBookId(wordBookId);
+    public void deleteWordBook(WordBook wordBook) {
+        repository.deleteWordBook(wordBook);
     }
+
 
     public LiveData<Boolean> isWorking() {
         return working;

@@ -2,17 +2,12 @@ package com.cyberlight.pocketword.widget;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.util.Log;
-import android.view.View;
-import android.widget.Button;
 import android.widget.Checkable;
-import android.widget.CompoundButton;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-public class CheckOnceButton extends androidx.appcompat.widget.AppCompatButton implements Checkable {
-    private static final String TAG = "CheckOnceButton";
+public class CheckOnceButton extends androidx.appcompat.widget.AppCompatTextView implements Checkable {
     private OnCheckedChangeListener mOnCheckedChangeListener;
     private boolean mCheck;
 
@@ -26,6 +21,7 @@ public class CheckOnceButton extends androidx.appcompat.widget.AppCompatButton i
 
     public CheckOnceButton(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        setOnClickListener(v -> toggle());
     }
 
     @Override
@@ -46,7 +42,6 @@ public class CheckOnceButton extends androidx.appcompat.widget.AppCompatButton i
     @Override
     public void toggle() {
         // to prevent toggle when the button is already checked
-        Log.d(TAG, String.valueOf(isChecked()));
         if (!isChecked()) {
             setChecked(true);
         }
@@ -56,7 +51,7 @@ public class CheckOnceButton extends androidx.appcompat.widget.AppCompatButton i
         mOnCheckedChangeListener = listener;
     }
 
-    public static interface OnCheckedChangeListener {
+    public interface OnCheckedChangeListener {
         /**
          * Called when the checked state of a compound button has changed.
          *

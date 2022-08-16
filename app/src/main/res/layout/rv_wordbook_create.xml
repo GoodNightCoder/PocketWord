@@ -19,7 +19,7 @@
         android:gravity="center_vertical"
         android:paddingVertical="8dp"
         android:text="@string/rv_wordbook_create_text"
-        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:textSize="16sp"
         app:drawableStartCompat="@drawable/ic_baseline_add_24" />
 

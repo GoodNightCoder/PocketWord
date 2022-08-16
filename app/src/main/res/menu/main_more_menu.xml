@@ -4,12 +4,9 @@
         android:id="@+id/main_more_import"
         android:title="@string/more_menu_import_title" />
     <item
-        android:id="@+id/main_more_delete"
-        android:title="@string/more_menu_delete_title" />
+        android:id="@+id/main_more_edit"
+        android:title="@string/more_menu_edit_title" />
     <item
         android:id="@+id/main_more_download_audio"
         android:title="@string/more_menu_download_audio_title" />
-    <item
-        android:id="@+id/main_more_build_dict"
-        android:title="build dict" />
 </menu>

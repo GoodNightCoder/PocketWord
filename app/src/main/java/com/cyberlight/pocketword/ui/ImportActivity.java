@@ -2,15 +2,11 @@ package com.cyberlight.pocketword.ui;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.Dialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.Gravity;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -25,10 +21,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.cyberlight.pocketword.R;
-import com.cyberlight.pocketword.data.db.DataRepository;
 import com.cyberlight.pocketword.data.db.entity.Word;
-import com.cyberlight.pocketword.data.db.entity.WordBook;
-import com.cyberlight.pocketword.data.db.entity.WordBookWord;
 
 @SuppressLint("NotifyDataSetChanged")
 public class ImportActivity extends AppCompatActivity

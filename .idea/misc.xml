@@ -4,10 +4,17 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/File/Dream/Project/Android/PocketWord/app/src/main/res/drawable/bg_btn_rc_8.xml" value="0.1" />
+        <entry key="..\:/File/Dream/Project/Android/PocketWord/app/src/main/res/drawable/bg_known_btn.xml" value="0.152" />
+        <entry key="..\:/File/Dream/Project/Android/PocketWord/app/src/main/res/drawable/bg_search_et.xml" value="0.152" />
+        <entry key="..\:/File/Dream/Project/Android/PocketWord/app/src/main/res/drawable/bg_unknown_btn.xml" value="0.152" />
         <entry key="..\:/File/Dream/Project/Android/PocketWord/app/src/main/res/drawable/ic_baseline_arrow_back_ios_24.xml" value="0.1" />
         <entry key="..\:/File/Dream/Project/Android/PocketWord/app/src/main/res/drawable/ic_launcher_background.xml" value="0.152" />
         <entry key="..\:/File/Dream/Project/Android/PocketWord/app/src/main/res/drawable/ic_launcher_foreground.xml" value="0.152" />
-        <entry key="..\:/File/Dream/Project/Android/PocketWord/app/src/main/res/layout/activity_play.xml" value="0.4" />
+        <entry key="..\:/File/Dream/Project/Android/PocketWord/app/src/main/res/layout/activity_edit.xml" value="0.4" />
+        <entry key="..\:/File/Dream/Project/Android/PocketWord/app/src/main/res/layout/activity_main.xml" value="0.3493975903614458" />
+        <entry key="..\:/File/Dream/Project/Android/PocketWord/app/src/main/res/layout/activity_play.xml" value="0.264" />
+        <entry key="..\:/File/Dream/Project/Android/PocketWord/app/src/main/res/layout/activity_statistics.xml" value="0.25587606837606836" />
+        <entry key="..\:/File/Dream/Project/Android/PocketWord/app/src/main/res/layout/dialog_confirm_import.xml" value="0.37587238285144564" />
         <entry key="..\:/File/Dream/Project/Android/PocketWord/app/src/main/res/layout/dialog_text_import.xml" value="0.37587238285144564" />
         <entry key="..\:/File/Dream/Project/Android/PocketWord/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.1" />
         <entry key="..\:/File/Dream/Project/Android/PocketWord/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.1" />

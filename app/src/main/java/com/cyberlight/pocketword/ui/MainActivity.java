@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.MenuInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -16,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -44,7 +44,6 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
-    private static final int REQUEST_DICT_CSV_OPEN = 68;
 
     private ActivityMainViewModel mViewModel;
 
@@ -53,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
 
     private final List<CollectWord> mWords = new ArrayList<>();
     private final List<WordBook> mWordBooks = new ArrayList<>();
+    private WordBook mUsingWordBook;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,8 +76,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onChoose(WordBook wordBook) {
                 // 选中词书
-                mViewModel.useWordBook(wordBook.getWordBookId());
-                wordBooksRv.setVisibility(View.GONE);
+                mViewModel.useWordBook(wordBook);
             }
 
             @Override
@@ -86,9 +85,15 @@ public class MainActivity extends AppCompatActivity {
                 if (fragmentManager.findFragmentByTag(CreateWordBookDialogFragment.TAG) == null) {
                     DialogFragment dialogFragment = new CreateWordBookDialogFragment();
                     dialogFragment.show(getSupportFragmentManager(), CreateWordBookDialogFragment.TAG);
-                    wordBooksRv.setVisibility(View.GONE);
                 }
             }
+
+            @Override
+            public void onDelete(WordBook wordBook) {
+                // 删除词书
+                mViewModel.deleteWordBook(wordBook);
+            }
+
         });
 
         searchEt.setFilters(new InputFilter[]{(source, start, end, dest, dstart, dend) ->
@@ -131,24 +136,30 @@ public class MainActivity extends AppCompatActivity {
                 switch (item.getItemId()) {
                     case R.id.main_more_import:
                         // 导入单词
+                        if (mUsingWordBook == null) {
+                            Toast.makeText(this, getString(R.string.main_no_book_toast), Toast.LENGTH_SHORT).show();
+                            return true;
+                        }
                         Intent importIntent = new Intent(this, ImportActivity.class);
                         startActivity(importIntent);
                         return true;
-                    case R.id.main_more_delete:
-                        // fixme:
-//                        setDeleteMode(true);
+                    case R.id.main_more_edit:
+                        // 编辑单词
+                        if (mUsingWordBook == null) {
+                            Toast.makeText(this, getString(R.string.main_no_book_toast), Toast.LENGTH_SHORT).show();
+                            return true;
+                        }
+                        Intent editIntent = new Intent(this, EditActivity.class);
+                        startActivity(editIntent);
                         return true;
                     case R.id.main_more_download_audio:
                         // 启动服务下载单词音频
+                        if (mUsingWordBook == null) {
+                            Toast.makeText(this, getString(R.string.main_no_book_toast), Toast.LENGTH_SHORT).show();
+                            return true;
+                        }
                         Intent downloadServiceIntent = new Intent(this, DownloadAudioService.class);
                         startService(downloadServiceIntent);
-                        return true;
-                    case R.id.main_more_build_dict:// fixme: 数据库设计完全后去除
-                        // 选择CSV文件构建词典
-                        Intent getDictCsvIntent = new Intent(Intent.ACTION_GET_CONTENT);
-                        getDictCsvIntent.setType("*/*");
-                        getDictCsvIntent.addCategory(Intent.CATEGORY_OPENABLE);
-                        startActivityForResult(getDictCsvIntent, REQUEST_DICT_CSV_OPEN);
                         return true;
                     default:
                         return false;
@@ -161,7 +172,6 @@ public class MainActivity extends AppCompatActivity {
 
         mViewModel.getWords().observe(this, collectWords -> {
             if (collectWords != null) {
-                Log.d(TAG, "刷新单词");
                 mWords.clear();
                 mWords.addAll(collectWords);
                 mWordRecyclerAdapter.notifyDataSetChanged();
@@ -175,6 +185,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         mViewModel.getUsingWordBook().observe(this, wordBook -> {
+            mUsingWordBook = wordBook;
             if (wordBook != null) {
                 wordBookTv.setText(wordBook.getWordBookName());
             } else {
@@ -189,49 +200,5 @@ public class MainActivity extends AppCompatActivity {
         StudyRemindReceiver.checkReminder(this);
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_DICT_CSV_OPEN && resultCode == Activity.RESULT_OK && data != null) {
-            // 从csv文件导入单词到词典
-            Uri uri = data.getData();
-            if (uri != null) {
-                List<Word> wordsToImport = new ArrayList<>();
-                try {
-                    // 读取csv文件词汇
-                    BufferedReader br = new BufferedReader(new InputStreamReader(
-                            getContentResolver().openInputStream(uri), StandardCharsets.UTF_8));
-                    String line;
-                    while ((line = br.readLine()) != null) {
-                        String[] arr = line.split("\\|");
-                        if (arr.length == 0) continue;
-                        String word = null, mean = null, accent = null;
-                        for (int i = 0; i < arr.length; i++) {
-                            switch (i) {
-                                case 0:
-                                    word = arr[i].trim();
-                                    break;
-                                case 1:
-                                    mean = arr[i].trim();
-                                    break;
-                                case 2:
-                                    accent = arr[i].trim();
-                            }
-                        }
-                        if (!TextUtils.isEmpty(word) && !TextUtils.isEmpty(mean)) {
-                            Word w = new Word(word, mean, accent, null);
-                            wordsToImport.add(w);
-                        }
-                    }
-                    br.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                if (wordsToImport.size() > 0) {
-                    mViewModel.importWordsToDict(wordsToImport);
-                }
-            }
-        }
-    }
 
 }

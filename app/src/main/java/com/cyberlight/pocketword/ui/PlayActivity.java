@@ -15,9 +15,11 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
+import androidx.core.content.ContextCompat;
 
 import com.cyberlight.pocketword.data.db.entity.WordBookWord;
 import com.cyberlight.pocketword.data.pref.PrefsMgr;
@@ -50,16 +52,20 @@ public class PlayActivity extends AppCompatActivity {
     private boolean mPlaySound = true;
     private boolean mShowWord = true;
     private boolean mShowMean = true;
+    private boolean mShowKnow = false;
     private boolean mSkipKnown;
     // 播放延迟毫秒数
     private long mDelayMillis;
 
+    private int mDailyGoal;
     // 记录学习开始时间，结束时将学习时长保存
     private long mStartTime;
     // 已学习单词个数
     private int mLearnedCount = -1;
     // 当前日期，用于判断是否跨天
     private LocalDate mToday;
+    // 当前日期的数据库记录
+    private Record mTodayRecord;
     // 使用的词书，结束时更新该词书的学习进度
     private WordBook mUsingWordBook;
     private List<CollectWord> mPlayWords;
@@ -69,11 +75,15 @@ public class PlayActivity extends AppCompatActivity {
     private int mCurProgress;
     private int mLastProgress;
 
+    private int mKnownColor;
+    private int mUnknownColor;
+    private int mSettingsShowColor;
+    private int mSettingsHideColor;
     private TextView mWordTv;
     private TextView mMeanTv;
     private TextView mAccentTv;
     private TextView mInfoTv;
-    private TextView mKnownTv;
+    private ImageView mKnownIv;
     private final Handler mHandler = new Handler();
     private final Runnable mRunnable = new Runnable() {
         @Override
@@ -112,6 +122,16 @@ public class PlayActivity extends AppCompatActivity {
                     mSkipKnown ? mCurUnknownProgress + 1 : mCurProgress + 1,
                     mSkipKnown ? mUnknownIndices.size() : mPlayWords.size()));
             mLearnedCount++;
+            // 每日目标完成时提醒用户
+            int todayLearnedCount = mTodayRecord != null
+                    ? mTodayRecord.getStudyCount() + mLearnedCount
+                    : mLearnedCount;
+            if (todayLearnedCount == mDailyGoal) {
+                Toast.makeText(PlayActivity.this, getString(R.string.play_daily_goal_achieved_toast), Toast.LENGTH_LONG).show();
+                MediaPlayer mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.achieve_goal);
+                mediaPlayer.setOnCompletionListener(MediaPlayer::release);
+                mediaPlayer.start();
+            }
             // 准备下一个单词
             progressNext();
             // 检查跨天
@@ -161,23 +181,22 @@ public class PlayActivity extends AppCompatActivity {
                 });
 
         // 动画期间用户点击会导致状态异常
-        mKnownTv.setClickable(false);
-        mKnownTv.animate()
+        mKnownIv.setClickable(false);
+        mKnownIv.animate()
                 .alpha(0f)
                 .setDuration(animationDuration)
                 .setListener(new AnimatorListenerAdapter() {
                     @Override
                     public void onAnimationEnd(Animator animation) {
-                        mKnownTv.setText(known
-                                ? getString(R.string.play_known_tv_known)
-                                : getString(R.string.play_known_tv_unknown));
-                        mKnownTv.animate()
+
+                        setUiKnown(known);
+                        mKnownIv.animate()
                                 .alpha(1f)
                                 .setDuration(animationDuration)
                                 .setListener(new AnimatorListenerAdapter() {
                                     @Override
                                     public void onAnimationEnd(Animator animation) {
-                                        mKnownTv.setClickable(true);
+                                        mKnownIv.setClickable(true);
                                     }
                                 });
                     }
@@ -210,15 +229,17 @@ public class PlayActivity extends AppCompatActivity {
             LocalDate dateToUpdateRecord = mToday;
             mToday = today;
             new Thread(() -> {
-                Record record = mRepository.getRecordByDateSync(dateToUpdateRecord);
-                if (record != null) {
-                    record.setStudyDuration(record.getStudyDuration() + durationToAdd);
-                    record.setStudyCount(record.getStudyCount() + countToAdd);
-                    mRepository.updateRecord(record);
+                // 将昨天的学习记录保存
+                if (mTodayRecord != null) {
+                    mTodayRecord.setStudyDuration(mTodayRecord.getStudyDuration() + durationToAdd);
+                    mTodayRecord.setStudyCount(mTodayRecord.getStudyCount() + countToAdd);
+                    mRepository.updateRecord(mTodayRecord);
                 } else {
-                    record = new Record(dateToUpdateRecord, countToAdd, durationToAdd);
+                    Record record = new Record(dateToUpdateRecord, countToAdd, durationToAdd);
                     mRepository.insertRecord(record);
                 }
+                // 获取今天的学习记录
+                mTodayRecord = mRepository.getRecordByDateSync(today);
             }).start();
         }
     }
@@ -233,16 +254,30 @@ public class PlayActivity extends AppCompatActivity {
         mMeanTv = findViewById(R.id.play_mean_tv);
         mAccentTv = findViewById(R.id.play_accent_tv);
         mInfoTv = findViewById(R.id.play_info_tv);
-        mKnownTv = findViewById(R.id.play_known_tv);
+        mKnownIv = findViewById(R.id.play_known_iv);
         ImageView backIv = findViewById(R.id.play_back_iv);
         TextView delayTv = findViewById(R.id.play_delay_tv);
         SeekBar seekBar = findViewById(R.id.seek_bar);
         SwitchCompat soundSwitch = findViewById(R.id.play_sound_switch);
         SwitchCompat wordSwitch = findViewById(R.id.play_word_switch);
         SwitchCompat meanSwitch = findViewById(R.id.play_mean_switch);
+        SwitchCompat knowSwitch = findViewById(R.id.play_know_switch);
         LinearLayout controlPanel = findViewById(R.id.play_control_panel);
         ImageView settingsIv = findViewById(R.id.play_settings_iv);
         mRepository = DataRepository.getInstance(this);
+
+        // 获取界面用到的各种颜色
+        TypedArray a1 = obtainStyledAttributes(new int[]{com.google.android.material.R.attr.colorControlNormal});
+        TypedArray a2 = obtainStyledAttributes(new int[]{androidx.appcompat.R.attr.colorPrimary});
+        try {
+            mSettingsHideColor = a1.getColor(0, Color.BLACK);
+            mKnownColor = a2.getColor(0, Color.BLACK);
+            mSettingsShowColor = a2.getColor(0, Color.BLACK);
+        } finally {
+            a1.recycle();
+            a2.recycle();
+        }
+        mUnknownColor = ContextCompat.getColor(PlayActivity.this, R.color.gray);
 
         backIv.setOnClickListener(v -> finish());
 
@@ -272,12 +307,12 @@ public class PlayActivity extends AppCompatActivity {
             }
         });
 
-        mKnownTv.setOnClickListener(v -> {
+        mKnownIv.setOnClickListener(v -> {
             CollectWord curWord = mPlayWords.get(mLastProgress);
             if (curWord.isKnown()) return;
             // 更新mPlayWords中该单词的known
             curWord.setKnown(true);
-            mKnownTv.setText(getString(R.string.play_known_tv_known));
+            setUiKnown(true);
             // 更新数据库中该单词的known
             new Thread(() -> {
                 WordBookWord wordBookWord = mRepository.getWordBookWordSync(
@@ -320,29 +355,20 @@ public class PlayActivity extends AppCompatActivity {
             mMeanTv.setVisibility(mShowMean ? View.VISIBLE : View.INVISIBLE);
         });
 
+        knowSwitch.setChecked(mShowKnow);
+        knowSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            mShowKnow = isChecked;
+            mKnownIv.setVisibility(mShowKnow ? View.VISIBLE : View.INVISIBLE);
+        });
+
         settingsIv.setOnClickListener(new View.OnClickListener() {
             boolean hideSettings = true;
 
             @Override
             public void onClick(View v) {
                 hideSettings = !hideSettings;
-                if (hideSettings) {
-                    TypedArray a = obtainStyledAttributes(new int[]{com.google.android.material.R.attr.colorControlNormal});
-                    try {
-                        settingsIv.setColorFilter(a.getColor(0, Color.RED));
-                    } finally {
-                        a.recycle();
-                    }
-                    controlPanel.setVisibility(View.INVISIBLE);
-                } else {
-                    TypedArray a = obtainStyledAttributes(new int[]{androidx.appcompat.R.attr.colorPrimary});
-                    try {
-                        settingsIv.setColorFilter(a.getColor(0, Color.RED));
-                    } finally {
-                        a.recycle();
-                    }
-                    controlPanel.setVisibility(View.VISIBLE);
-                }
+                settingsIv.setColorFilter(hideSettings ? mSettingsHideColor : mSettingsShowColor);
+                controlPanel.setVisibility(hideSettings ? View.GONE : View.VISIBLE);
             }
         });
         // 加载数据，加载好之后启动mRunnable任务
@@ -397,10 +423,17 @@ public class PlayActivity extends AppCompatActivity {
                 }
             }
             mToday = LocalDate.now();
+            mTodayRecord = mRepository.getRecordByDateSync(mToday);
             mStartTime = System.currentTimeMillis();
             mLearnedCount = -1;
+            mDailyGoal = prefsMgr.getDailyGoal();
             mHandler.post(mRunnable);
         }).start();
+    }
+
+    public void setUiKnown(boolean known) {
+        mKnownIv.setColorFilter(known ? mKnownColor : mUnknownColor);
+        mKnownIv.setBackgroundResource(known ? R.drawable.bg_known_btn : R.drawable.bg_unknown_btn);
     }
 
     @Override
@@ -415,13 +448,12 @@ public class PlayActivity extends AppCompatActivity {
             long durationToAdd = System.currentTimeMillis() - mStartTime;
             int countToAdd = mLearnedCount;
             new Thread(() -> {
-                Record record = mRepository.getRecordByDateSync(mToday);
-                if (record != null) {
-                    record.setStudyDuration(record.getStudyDuration() + durationToAdd);
-                    record.setStudyCount(record.getStudyCount() + countToAdd);
-                    mRepository.updateRecord(record);
+                if (mTodayRecord != null) {
+                    mTodayRecord.setStudyDuration(mTodayRecord.getStudyDuration() + durationToAdd);
+                    mTodayRecord.setStudyCount(mTodayRecord.getStudyCount() + countToAdd);
+                    mRepository.updateRecord(mTodayRecord);
                 } else {
-                    record = new Record(mToday, countToAdd, durationToAdd);
+                    Record record = new Record(mToday, countToAdd, durationToAdd);
                     mRepository.insertRecord(record);
                 }
             }).start();

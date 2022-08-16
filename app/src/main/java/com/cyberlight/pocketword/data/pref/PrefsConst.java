@@ -1,10 +1,5 @@
 package com.cyberlight.pocketword.data.pref;
 
-import androidx.annotation.IntDef;
-
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-
 public class PrefsConst {
     public static final String STUDY_REMIND_KEY = "study_remind";
     public static final String STUDY_REMIND_TIME_KEY = "study_remind_time";

@@ -25,7 +25,6 @@ import java.util.List;
 
 public class ActivityImportViewModel extends AndroidViewModel {
 
-    private static final String TAG = "ActivityImportViewModel";
     public final List<Word> importWords = new ArrayList<>();
     private final DataRepository repository;
     private WordBook usingWordBook;

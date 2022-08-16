@@ -3,13 +3,12 @@ package com.cyberlight.pocketword.data.db;
 import android.content.Context;
 
 import androidx.lifecycle.LiveData;
-import androidx.room.Query;
 
-import com.cyberlight.pocketword.model.CollectWord;
 import com.cyberlight.pocketword.data.db.entity.Record;
 import com.cyberlight.pocketword.data.db.entity.Word;
 import com.cyberlight.pocketword.data.db.entity.WordBook;
 import com.cyberlight.pocketword.data.db.entity.WordBookWord;
+import com.cyberlight.pocketword.model.CollectWord;
 import com.google.common.util.concurrent.FutureCallback;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
@@ -82,6 +81,10 @@ public class DataRepository {
         database.wordBookDao().updateWordBook(wordBook);
     }
 
+    public void deleteWordBook(WordBook wordBook) {
+        database.wordBookDao().deleteWordBook(wordBook);
+    }
+
     public void insertWordBookWord(WordBookWord wordBookWord) {
         database.wordBookWordDao().insertWordBookWordSync(wordBookWord);
     }
@@ -94,13 +97,8 @@ public class DataRepository {
         return database.wordBookWordDao().getWordBookWordSync(wordId, wordBookId);
     }
 
-    /**
-     * 构建词典用
-     * fixme:去掉该方法，用预填充数据库代替
-     */
-    public void insertWords(Context context, List<Word> words, FutureCallback<Void> callback) {
-        ListenableFuture<Void> future = database.wordDao().insertWords(words);
-        Futures.addCallback(future, callback, context.getMainExecutor());
+    public void deleteWordBookWords(List<WordBookWord> wordBookWords) {
+        database.wordBookWordDao().deleteWordBookWords(wordBookWords);
     }
 
     public Record getRecordByDateSync(LocalDate date) {

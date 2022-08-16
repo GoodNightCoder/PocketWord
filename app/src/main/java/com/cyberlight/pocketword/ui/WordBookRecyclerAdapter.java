@@ -3,6 +3,7 @@ package com.cyberlight.pocketword.ui;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -26,11 +27,13 @@ public class WordBookRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
     private static class ItemViewHolder extends RecyclerView.ViewHolder {
         private final LinearLayout mItemLayout;
         private final TextView mItemTv;
+        private final ImageView mDeleteIv;
 
         public ItemViewHolder(View v) {
             super(v);
             mItemLayout = v.findViewById(R.id.rv_wordbook_item_layout);
             mItemTv = v.findViewById(R.id.rv_wordbook_item_tv);
+            mDeleteIv = v.findViewById(R.id.rv_wordbook_delete_tv);
         }
     }
 
@@ -73,6 +76,11 @@ public class WordBookRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
                     mOnClickCallback.onChoose(wordBook);
                 }
             });
+            itemViewHolder.mDeleteIv.setOnClickListener(v -> {
+                if (mOnClickCallback != null) {
+                    mOnClickCallback.onDelete(wordBook);
+                }
+            });
         } else if (holder instanceof CreateViewHolder) {
             CreateViewHolder createViewHolder = (CreateViewHolder) holder;
             createViewHolder.mCreateLayout.setOnClickListener(view -> {
@@ -97,6 +105,8 @@ public class WordBookRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
         void onChoose(WordBook wordBook);
 
         void onCreate();
+
+        void onDelete(WordBook wordBook);
     }
 
 }

@@ -9,8 +9,8 @@ import org.json.JSONObject;
 public class TransUtil {
 
     private static final String TAG = "TransUtil";
-    public static String APP_ID = "20220703001262714";
-    public static String SECURITY_KEY = "8V0S_CxAsK15L5oWmKof";
+    public static final String APP_ID = "20220703001262714";
+    public static final String SECURITY_KEY = "8V0S_CxAsK15L5oWmKof";
 
     public synchronized static String translate(String query, String from, String to) {
         TransApi api = new TransApi(APP_ID, SECURITY_KEY);

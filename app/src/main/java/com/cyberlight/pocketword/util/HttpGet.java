@@ -51,7 +51,7 @@ class HttpGet {
             InputStream is = conn.getInputStream();
             BufferedReader br = new BufferedReader(new InputStreamReader(is));
             StringBuilder builder = new StringBuilder();
-            String line = null;
+            String line;
             while ((line = br.readLine()) != null) {
                 builder.append(line);
             }
@@ -133,7 +133,7 @@ class HttpGet {
         return input;
     }
 
-    private static TrustManager myX509TrustManager = new X509TrustManager() {
+    private static final TrustManager myX509TrustManager = new X509TrustManager() {
 
         @Override
         public X509Certificate[] getAcceptedIssuers() {

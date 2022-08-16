@@ -93,9 +93,9 @@ public class LineChartView extends View {
     private final Rect mTableDrawRect;
     // 绘制准备数据
     private int mBgNumsX;
-    private int[] mBgNumsYs;
-    private String[] mBgNumsTexts;
-    private int[] mBgLinesYs;
+    private final int[] mBgNumsYs;
+    private final String[] mBgNumsTexts;
+    private final int[] mBgLinesYs;
     private int mBgDatesY;
     private Point[] mPoints;
     private final RectF mDetailRectF;

@@ -63,4 +63,9 @@
         <attr name="digits" format="integer" />
         <attr name="digitsEnable" format="boolean" />
     </declare-styleable>
+
+    <declare-styleable name="CheckOnceButton">
+        <attr name="drawableChecked" format="reference|color" />
+        <attr name="drawableUnchecked" format="reference|color" />
+    </declare-styleable>
 </resources>
