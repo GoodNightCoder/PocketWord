@@ -126,6 +126,10 @@ public class MainActivity extends AppCompatActivity {
         });
 
         playIv.setOnClickListener(v -> {
+            if (mUsingWordBook == null) {
+                Toast.makeText(this, getString(R.string.main_no_book_toast), Toast.LENGTH_SHORT).show();
+                return;
+            }
             Intent playIntent = new Intent(this, PlayActivity.class);
             startActivity(playIntent);
         });
